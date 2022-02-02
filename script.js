@@ -31,7 +31,7 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-  // coloque seu código aqu
+  // coloque seu código aqui
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -41,5 +41,14 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
+
+const sectionItems = document.getElementsByClassName('items')[0];
+
+const criaCards = async () => {
+  const results = await fetchProducts('computador');
+
+  results.forEach(({ id: sku, title: name, thumbnail: image }) => sectionItems.appendChild(createProductItemElement({ sku, name, image })));
+};
+criaCards();
 
 window.onload = () => {};
