@@ -4,18 +4,17 @@ const computadorSearch = require('../mocks/search');
 
 describe('1 - Teste a função fecthProducts', () => {
   it('1.Teste se fetchProducts é uma função', async () => {
-    const response = await fetchProducts('computador');
-    expect(typeof response).toBe('object');
+    expect(typeof fetchProducts).toBe('function');
   });
   it('2.Execute a função fetchProducts com o argumento "computador" e teste se fetch foi chamada', async () => {
-    const response = await fetchProducts('computador');
-    expect(response).toHaveBeenCalled();
+    // const response = await fetchProducts('computador');
+    await fetchProducts('computador');
+    expect(fetch).toHaveBeenCalled();
   });
   it('3.Teste se, ao chamar a função fetchProducts com o argumento "computador", a função fetch utiliza o endpoint', async () => {
-    const endpoint =
-      'https://api.mercadolibre.com/sites/MLB/search?q=computador';
-    const response = await fetchProducts('computador');
-    expect(response).toHaveBeenCalledWith(endpoint);
+    const url = 'https://api.mercadolibre.com/sites/MLB/search?q=computador';
+    await fetchProducts('computador');
+    expect(fetch).toHaveBeenCalledWith(url);
   });
   it('4.Teste se o retorno da função fetchProducts com o argumento "computador" é uma estrutura de dados igual ao objeto computadorSearch, que já está importado no arquivo.', async () => {
     const response = await fetchProducts('computador');
