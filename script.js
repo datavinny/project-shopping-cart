@@ -19,9 +19,11 @@ function createProductItemElement({ sku, name, image }) {
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
-  section.appendChild(
-    createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'),
-  );
+  section
+    .appendChild(
+      createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'),
+    )
+    .addEventListener('click', colocaItemNoCart);
 
   return section;
 }
@@ -31,7 +33,7 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-  // coloque seu código aqui
+  // console.log(event.target);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -42,13 +44,23 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-const sectionItems = document.getElementsByClassName('items')[0];
-
 const criaCards = async () => {
-  const results = await fetchProducts('computador');
-
-  results.forEach(({ id: sku, title: name, thumbnail: image }) => sectionItems.appendChild(createProductItemElement({ sku, name, image })));
+  const sectionItems = document.getElementsByClassName('items')[0];
+  const { results } = await fetchProducts('computador');
+  results.forEach(({ id: sku, title: name, thumbnail: image }) => {
+    sectionItems.appendChild(createProductItemElement({ sku, name, image }));
+  });
 };
 criaCards();
+
+const colocaItemNoCart = async (event) => {
+  // console.log(event.target.parentNode);
+  // const itemId = event.target.siblings('.item__sku');
+  const itemId = getSkuFromProductItem(event.target.parentNode);
+  const { id: sku, title: name, price: salePrice } = await fetchItem(itemId);
+
+  const cartItems = document.getElementsByClassName('cart__items')[0];
+  cartItems.appendChild(createCartItemElement({ sku, name, salePrice }));
+};
 
 window.onload = () => {};
