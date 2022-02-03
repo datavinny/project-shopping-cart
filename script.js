@@ -12,22 +12,6 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-function createProductItemElement({ sku, name, image }) {
-  const section = document.createElement('section');
-  section.className = 'item';
-
-  section.appendChild(createCustomElement('span', 'item__sku', sku));
-  section.appendChild(createCustomElement('span', 'item__title', name));
-  section.appendChild(createProductImageElement(image));
-  section
-    .appendChild(
-      createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'),
-    )
-    .addEventListener('click', colocaItemNoCart);
-
-  return section;
-}
-
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
@@ -52,6 +36,34 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
+}
+
+const colocaItemNoCart = async (event) => {
+  // console.log(event.target.parentNode);
+  // const itemId = event.target.siblings('.item__sku');
+  const itemId = getSkuFromProductItem(event.target.parentNode);
+  const { id: sku, title: name, price: salePrice } = await fetchItem(itemId);
+
+  const cartItems = document.getElementsByClassName('cart__items')[0];
+  cartItems.appendChild(createCartItemElement({ sku, name, salePrice }));
+  saveCartItems();
+  // getTotalPrice();
+};
+
+function createProductItemElement({ sku, name, image }) {
+  const section = document.createElement('section');
+  section.className = 'item';
+
+  section.appendChild(createCustomElement('span', 'item__sku', sku));
+  section.appendChild(createCustomElement('span', 'item__title', name));
+  section.appendChild(createProductImageElement(image));
+  section
+    .appendChild(
+      createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'),
+    )
+    .addEventListener('click', colocaItemNoCart);
+
+  return section;
 }
 
 const criaCards = async () => {
@@ -81,18 +93,6 @@ criaCards();
 
 //   // totalPrice.appendChild(result);
 // };
-
-const colocaItemNoCart = async (event) => {
-  // console.log(event.target.parentNode);
-  // const itemId = event.target.siblings('.item__sku');
-  const itemId = getSkuFromProductItem(event.target.parentNode);
-  const { id: sku, title: name, price: salePrice } = await fetchItem(itemId);
-
-  const cartItems = document.getElementsByClassName('cart__items')[0];
-  cartItems.appendChild(createCartItemElement({ sku, name, salePrice }));
-  saveCartItems();
-  // getTotalPrice();
-};
 
 const arrItemsSalvos = () => {
   const cart = document.getElementsByClassName('cart__items')[0];
