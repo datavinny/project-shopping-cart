@@ -38,6 +38,14 @@ function cartItemClickListener(event) {
   saveCartItems();
 }
 
+const btn = document.getElementsByClassName('empty-cart')[0];
+const limpaTodoCarrinho = () => {
+  const cartItems = document.getElementsByClassName('cart__items')[0];
+  cartItems.innerHTML = '';
+  saveCartItems();
+};
+btn.addEventListener('click', limpaTodoCarrinho);
+
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
@@ -55,6 +63,25 @@ const criaCards = async () => {
 };
 criaCards();
 
+// const getTotalPrice = () => {
+//   const cart = document.getElementsByClassName('cart__items')[0];
+
+//   if (!cart.childNodes) {
+//     cart.childNodes.forEach((element) => {
+//       console.log(element.innerText);
+//     });
+//   }
+//   // const totalPrice = document.createElement('section');
+//   // totalPrice.className = 'total-price';
+//   // totalPrice.innerText = 'total';
+//   // cart.appendChild(totalPrice);
+
+//   // const result = document.createElement('section');
+//   // result.innerText = 'result';
+
+//   // totalPrice.appendChild(result);
+// };
+
 const colocaItemNoCart = async (event) => {
   // console.log(event.target.parentNode);
   // const itemId = event.target.siblings('.item__sku');
@@ -64,6 +91,7 @@ const colocaItemNoCart = async (event) => {
   const cartItems = document.getElementsByClassName('cart__items')[0];
   cartItems.appendChild(createCartItemElement({ sku, name, salePrice }));
   saveCartItems();
+  // getTotalPrice();
 };
 
 const arrItemsSalvos = () => {
