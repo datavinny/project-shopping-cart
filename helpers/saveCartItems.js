@@ -1,10 +1,5 @@
-const saveCartItems = (items) => {
-  if (!items) {
-    const elementCart = document.getElementsByClassName('cart__items')[0];
-    const arrItems = elementCart.innerHTML;
-    localStorage.setItem('cartItems', arrItems);
-  }
-  localStorage.setItem('cartItems', items);
+const saveCartItems = (item) => {
+  localStorage.setItem('cartItems', item);
 };
 
 if (typeof module !== 'undefined') {
